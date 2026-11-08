@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>اختبار الطفيليات التفاعلي</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f5f6f8;--card:#fff;--text:#1d2330;--muted:#667085;--line:#e1e4ea;--accent:#2f6fed;--ok:#177a43;--okbg:#e5f6ec;--bad:#c13434;--badbg:#fdeaea;--hover:#eef3ff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#13161b;--card:#1c2027;--text:#e8ebf0;--muted:#9aa3b2;--line:#2c323c;--accent:#6b9bff;--ok:#5fd18a;--okbg:#16301f;--bad:#ff7b7b;--badbg:#3a1c1c;--hover:#232a38}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#13161b;--card:#1c2027;--text:#e8ebf0;--muted:#9aa3b2;--line:#2c323c;--accent:#6b9bff;--ok:#5fd18a;--okbg:#16301f;--bad:#ff7b7b;--badbg:#3a1c1c;--hover:#232a38}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 90px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Segoe UI",Tahoma,system-ui,-apple-system,sans-serif;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--card);z-index:10}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--card);border-bottom:1px solid var(--line);padding:10px 16px}
+.hrow{display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:760px;margin:0 auto}
+.hrow h1{font-size:1rem;margin:0}
+.stats{font-size:.85rem;color:var(--muted);white-space:nowrap}
+.stats b{color:var(--text)}
+.bar{max-width:760px;margin:8px auto 0;height:6px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+main{max-width:760px;margin:0 auto;padding:16px}
+h2{font-size:1.15rem;margin:28px 0 4px;padding:10px 14px;background:var(--accent);color:#fff;border-radius:10px;direction:ltr;text-align:left}
+h3{font-size:.95rem;margin:18px 0 10px;color:var(--muted);direction:ltr;text-align:left}
+.q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.qt{direction:ltr;text-align:left;font-weight:600;margin-bottom:10px}
+.qt span{color:var(--accent);margin-right:6px}
+.opts{display:flex;flex-direction:column;gap:8px;direction:ltr}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;padding:10px 12px;border:1.5px solid var(--line);background:transparent;color:var(--text);border-radius:10px;font:inherit;cursor:pointer}
+.opt:hover:not(:disabled){background:var(--hover);border-color:var(--accent)}
+.opt b{min-width:1.4em;color:var(--muted)}
+.opt:disabled{cursor:default;color:var(--text);opacity:1}
+.opt.ok{background:var(--okbg);border-color:var(--ok)}
+.opt.bad{background:var(--badbg);border-color:var(--bad)}
+.tf{flex-direction:row}
+.tf .opt{justify-content:center;font-weight:600}
+.fb{margin-top:10px;font-size:.9rem;display:none}
+.fb.show{display:block}
+.fb .v{font-weight:700}
+.fb .v.ok{color:var(--ok)}.fb .v.bad{color:var(--bad)}
+.fb .n{direction:ltr;text-align:left;color:var(--muted);margin-top:4px}
+#final{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin:24px 0;text-align:center}
+#final .big{font-size:2.2rem;font-weight:800;color:var(--accent)}
+button.reset{font:inherit;padding:9px 18px;border-radius:10px;border:0;background:var(--accent);color:#fff;cursor:pointer;margin-top:10px}
+button.small{font:inherit;font-size:.8rem;padding:5px 10px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--text);cursor:pointer}
+</style>
+</head>
+<body>
+<header>
+  <div class="hrow">
+    <h1>اختبار الطفيليات</h1>
+    <div class="stats">تم حل <b id="d">0</b>/<b id="t">60</b> · صحيحة <b id="r">0</b></div>
+    <button class="small" onclick="build()">إعادة</button>
+  </div>
+  <div class="bar"><i id="pb"></i></div>
+</header>
+<main id="root"></main>
+
+<script>
+const S=[
+{t:"Introduction to Protozoa",parts:[
+{t:"Part I: Multiple Choice Questions (MCQs)",qs:[
+["Which of the following structures in a protozoan cell is mainly responsible for food ingestion, excretion, and respiration?",["Endoplasm","Ectoplasm","Karyosome","Chromatoide bodies"],1,"Ectoplasm is responsible for ingestion of food, excretion, respiration, protection, and sensation."],
+["What is the typical size range of protozoa?",["1 - 150 µm","10 - 500 µm","0.1 - 10 µm","1 - 15 mm"],0,"Protozoa have a wide range of size from 1 to 150 µm."],
+["Which protozoan parasite lacks specialized organelles for locomotion?",["Entamoeba","Balantidium","Giardia","Plasmodium"],3,"Plasmodium has no specific organ for locomotion."],
+["The inner, granular portion of the cytoplasm responsible for nutrition and reproduction is the:",["Ectoplasm","Endoplasm","Cytostome","Cytopyge"],1,"Endoplasm is the inner granular cytoplasm responsible for nutrition and reproduction."],
+["Which of the following belongs to the Subphylum Mastigophora?",["Entamoeba histolytica","Giardia lamblia","Balantidium coli","Plasmodium falciparum"],1,"Giardia belongs to Subphylum Mastigophora (flagellates). Entamoeba is Sarcodina."],
+["Multiple fission in protozoa, where the nucleus divides several times before cytoplasm division, is known as:",["Binary fission","Schizogony (Merogony)","Gametogony","Syngamy"],1,"Multiple fission (schizogony/merogony) produces multiple merozoites within a schizont."],
+["The central DNA-containing body located within the nucleus of a protozoan cell is called the:",["Cytostome","Karyosome (Endosome)","Cytopyge","Chromatoide body"],1,"The karyosome (endosome) is a DNA-containing body located centrally within the nucleus."],
+["Undigested food particles in ciliated protozoa are extruded through a specific cell structure known as the:",["Pseudopodium","Cytostome","Cytopyge","Karyosome"],2,"Undigested waste is extruded through the cytopyge or cell surface."],
+["In complex life cycles of protozoa, sexual reproduction (gametogony) typically occurs:",["In all intermediate hosts simultaneously","In one host, while asexual reproduction occurs in another host","Exclusively outside any host environment","Without any nuclear division"],1,"Complex life cycles alternate sexual reproduction in one host and asexual in another."],
+["Intestinal and luminal protozoa generally have a simple life cycle that requires:",["Two arthropod vectors","Only one host","Both a vertebrate and invertebrate host","Snails as intermediate hosts"],1,"Luminal/intestinal protozoa have simple life cycles requiring a single host."]
+]},
+{t:"Part II: True / False Questions",tf:1,qs:[
+["Protozoa are multicellular organisms that always live in large colonies.",0,"Protozoa are unicellular organisms (single-celled)."],
+["The ectoplasm gives rise to locomotion structures such as pseudopodia, cilia, and flagella.",1,"Locomotion organs (pseudopodia, flagella, cilia) develop from ectoplasm."],
+["The male cell in sexual reproduction of protozoa is termed the macrogamete.",0,"The female cell is the Macrogamete; the male cell is the Microgamete."],
+["Protozoa can perform excretion through contractile vacuoles, diffusion, and osmotic pressure.",1,"Excretion occurs via contractile vacuoles, diffusion, cytopyge, and osmotic pressure."],
+["Balantidium moves by means of pseudopodia.",0,"Balantidium moves by Cilia. Entamoeba uses pseudopodia."],
+["Simple binary fission can occur either longitudinally or transversely to form two organisms.",1,"Asexual binary fission can be longitudinal or transverse."],
+["Protozoan cells are capable of secreting substances such as cyst walls, cytolysins, and digestive enzymes.",1,"Protozoa can secrete cyst walls, enzymes, toxins, haemolysins, and pigments."],
+["The subphylum Sarcodina includes organisms that move using flagella, such as Giardia.",0,"Subphylum Sarcodina includes amoebae (e.g., E. histolytica); Mastigophora includes flagellates."],
+["Protozoa respiration can occur via direct uptake of oxygen or using oxygen liberated from metabolic processes.",1,"Respiration is by direct oxygen uptake or using oxygen liberated from metabolic processes."],
+["Contractile vacuoles and chromatoide bodies are typically located within the endoplasm.",1,"Endoplasm contains food vacuoles, contractile vacuoles, chromatoide bodies, and foreign bodies."]
+]}]},
+
+{t:"Entamoeba histolytica — Sarcomastigophora (Part I) – Question Bank",parts:[
+{t:"Part 1: Multiple Choice Questions (10)",qs:[
+["Which stage of Entamoeba histolytica is the infective stage?",["Trophozoite","Precyst","Mature (quadrinucleated) cyst","Immature cyst"],2,""],
+["How many nuclei does the mature cyst of E. histolytica contain?",["1","2","4","8"],2,""],
+["What is the average size of the E. histolytica trophozoite?",["5 – 10 μ","15 μ","20 – 30 μ","50 – 60 μ"],2,""],
+["Which of the following is a reservoir host of E. histolytica?",["Cattle","Cats, dogs and rats","Mosquitoes","Birds"],1,""],
+["Which stage is detected in FORMED stool?",["Trophozoite","Cyst","Metacystic trophozoite","Precyst only"],1,""],
+["The nucleus of the trophozoite is characterized by:",["Multiple nuclei with no karyosome","Single, rounded, with a karyosome and peripheral chromatin granules","Two nuclei with a large central karyosome","No visible nucleus"],1,""],
+["Which of the following is a feature of the ACUTE stage of intestinal amoebiasis?",["Tenesmus","Hemoptysis","Tender hepatomegaly","Constipation alternating with light dysentery"],0,""],
+["Which of the following is a manifestation of pulmonary amoebiasis?",["Tenesmus","Hemoptysis","Tender hepatomegaly","Bloody diarrhea"],1,""],
+["Which of the following is an INDIRECT method of diagnosis?",["Stool examination for cysts","Sputum examination","Detection of amoebic antibodies by ELISA","Examination of aspirated liver pus"],2,""],
+["Raw vegetables should be treated with vinegar for how long before consumption?",["5 minutes","10 minutes","30 minutes","2 hours"],2,""]
+]},
+{t:"Part 2: True / False (10)",tf:1,qs:[
+["The trophozoite is the active invasive form and feeds on starch and mucus in the colon lumen.",1,""],
+["The cyst of E. histolytica is rounded, thick-walled, with an average size of 15 μ.",1,""],
+["The mature cyst of E. histolytica contains 8 nuclei.",0,"Correction: the mature cyst has 4 nuclei."],
+["The trophozoite reproduces by binary fission.",1,""],
+["Man is the definitive host of E. histolytica.",1,""],
+["Cysts are detected in diarrheic (fluid) stool, while trophozoites are detected in formed stool.",0,"Correction: trophozoites are found in fluid stool and cysts in formed stool."],
+["In asymptomatic infection, the parasite lives in the intestinal lumen as a commensal and cysts may be found in the stool.",1,""],
+["Fever is a common feature of acute intestinal amoebiasis.",0,"Correction: fever is uncommon in the acute intestinal stage."],
+["Amoebic liver abscess presents with tender hepatomegaly, fever and pus.",1,""],
+["The infective stage of E. histolytica is the trophozoite.",0,"Correction: the infective stage is the mature cyst."]
+]}]},
+
+{t:"Lecture 1 — General Concepts of Parasitology",parts:[
+{t:"Part 1: Multiple Choice Questions:",qs:[
+["Which type of parasite capability allows it to produce disease specifically in an immunocompromised host?",["Ectoparasite","Endoparasite","Opportunistic parasite","Permanent parasite"],2,"e.g., Toxoplasma gondii."],
+["An organism in which a parasite reaches its sexual maturity (adult stage) is defined as the:",["Intermediate host","Definitive host","Paratenic host","Reservoir host"],1,"Host where parasite reaches sexual maturity."],
+["Which mode of parasitic disease transmission occurs when a parasite is transferred transplacentally from mother to fetus?",["Autoinfection","Contact transmission","Congenital transmission","Iatrogenic infection"],2,"Transmitted from mother to fetus transplacentally."],
+["Entamoeba histolytica causes tissue destruction through which of the following pathological mechanisms?",["Physical obstruction","Lytic necrosis","Neoplasm","Allergic reaction"],1,"Caused by lytic enzymes of Entamoeba histolytica."],
+["A host that harbors a parasite in an arrested state of development while keeping it viable and ready to infect a subsequent host is called a:",["Dead-end host","Paratenic host","Reservoir host","Vector"],1,"Harbors parasite in an arrested state of development."],
+["Which biological interaction describes an association where both organisms benefit, but neither is dependent on the other for survival?",["Commensalism","Mutualism","Symbiosis","Parasitism"],1,"Both benefit, but neither is dependent for survival."],
+["Infections naturally transmitted mainly in animals that may secondarily be acquired by humans are termed:",["Anthroponosis","Zooanthroponosis","Anthropozoonosis","Saprozoonosis"],2,"Infection mainly in animals, acquired by humans."],
+["Which parasite exhibits a facultative parasitic life cycle (able to live free-living or parasitic)?",["Ascaris","Naegleria fowleri","Human louse","Toxoplasma gondii"],1,"Can live free-living or parasitic."],
+["Infection transmitted through non-animal environmental sites such as food, soil, water, or plants is classified as:",["Direct zoonosis","Metazoonosis","Saprozoonosis","Sylvatic zoonosis"],2,"Transmitted by non-animal environmental sites."],
+["Schistosoma haematobium infection is clinically associated with which type of pathological outcome?",["Neoplasm (Malignancy)","Mechanical trauma","Lytic necrosis","Physical obstruction"],0,"Associated with bladder malignancy."]
+]},
+{t:"Part 2: True or False Questions (10 Questions)",tf:1,qs:[
+["The diagnostic stage of a parasite is the stage capable of entering and infecting the human body.",0,"This defines the Infective stage. Diagnostic stage exits host to be detected."],
+["Lice are classified as ectoparasites and permanent parasites.",1,"Lice live on skin surface (ectoparasite) and stay permanently."],
+["Mosquitoes act as temporary parasites because they visit the host from time to time for feeding.",1,"Mosquitoes visit the host periodically for blood feeding."],
+["A reservoir host is an animal host that harbors the same stages of the parasite as humans and serves as a source of infection.",1,"Reservoir host harbors same stages as humans, serving as infection source."],
+["In commensalism, both the parasite and the host derive mutual benefits from each other.",0,"In commensalism, only the parasite benefits without causing injury."],
+["Symbiosis is an association where both host and parasite are so interdependent that neither can survive without the other, and neither suffers harm.",1,"Symbiosis is an obligate mutualistic association without harm."],
+["Physical obstruction of luminal organs can be caused by a mass of collected Ascaris worms.",1,"Collected Ascaris worms can cause physical luminal obstruction."],
+["Iatrogenic parasitic transmission occurs through drinking contaminated water.",0,"Iatrogenic infection occurs via medical procedures like blood transfusion."],
+["Sylvatic zoonosis refers to zoonotic infections where the primary source of infection comes from man's own pet animals.",0,"Sylvatic zoonosis source is wild animals. Pets relate to Domestic zoonosis."],
+["Metazoonosis requires invertebrate vectors (such as arthropods) for transmission to hosts.",1,"Metazoonosis requires arthropod vectors for transmission."]
+]}]}
+];
+
+const $=id=>document.getElementById(id);
+function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+let total,done,right;
+
+function upd(){
+  $("d").textContent=done;$("t").textContent=total;$("r").textContent=right;
+  $("pb").style.width=(total?done/total*100:0)+"%";
+  const f=$("final");
+  if(done===total){
+    const p=Math.round(right/total*100);
+    f.innerHTML="";
+    f.append(el("div","",""),el("div","big",right+" / "+total+"  ("+p+"%)"),
+      el("div","",p>=85?"ممتاز! 🎉":p>=65?"جيد جدًا، كمّل مراجعة 👍":"راجعي الأخطاء وجرّبي تاني 💪"));
+    const b=el("button","reset","إعادة الاختبار");b.onclick=build;f.append(b);
+  } else {
+    f.textContent="النتيجة النهائية هتظهر هنا بعد ما تجاوبي على كل الأسئلة ("+done+" من "+total+")";
+  }
+}
+
+function build(){
+  const root=$("root");root.innerHTML="";total=0;done=0;right=0;
+  S.forEach(sec=>{
+    root.append(el("h2","",sec.t));
+    sec.parts.forEach(p=>{
+      root.append(el("h3","",p.t));
+      p.qs.forEach((q,i)=>{
+        total++;
+        const isTF=!!p.tf;
+        const text=q[0],opts=isTF?["True","False"]:q[1];
+        const ans=isTF?(q[1]?0:1):q[2],note=isTF?q[2]:q[3];
+        const card=el("div","q"),qt=el("div","qt");
+        qt.append(el("span","","Q"+(i+1)+"."),document.createTextNode(text));
+        const box=el("div","opts"+(isTF?" tf":""));
+        const fb=el("div","fb");
+        const btns=opts.map((o,k)=>{
+          const b=el("button","opt");b.type="button";
+          if(!isTF)b.append(el("b","","ABCD"[k]+")"));
+          b.append(document.createTextNode(o));
+          b.onclick=()=>{
+            btns.forEach(x=>x.disabled=true);
+            btns[ans].classList.add("ok");
+            const good=k===ans;
+            if(!good)b.classList.add("bad");
+            done++;if(good)right++;
+            const v=el("div","v "+(good?"ok":"bad"),good?"✔ إجابة صحيحة":"✘ إجابة خاطئة — الإجابة الصحيحة: "+(isTF?"":"ABCD"[ans]+") ")+opts[ans]);
+            fb.append(v);
+            if(note)fb.append(el("div","n",note));
+            fb.classList.add("show");
+            upd();
+          };
+          return b;
+        });
+        box.append(...btns);
+        card.append(qt,box,fb);root.append(card);
+      });
+    });
+  });
+  const f=el("div","");f.id="final";root.append(f);
+  upd();window.scrollTo({top:0});
+}
+build();
+</script>
+</body>
+</html>
